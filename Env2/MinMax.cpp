@@ -14,8 +14,8 @@ int main(int argc, char* argv[]){
 		}
 
 		if(max < atoi(argv[i])){
-                        max = atoi(argv[i]);
-                }
+            max = atoi(argv[i]);
+        }
 	}
 
 	std::cout << "Min: " << min << ", Max: " << max << "\n";

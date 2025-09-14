@@ -3,7 +3,7 @@
 int main(int argc, char* argv[]){
 
 	for(int i = 0; i < argc/2; i++){
-		auto t = argv[i];
+		char* t = argv[i];
 	    argv[i] = argv[argc - i - 1];
 		argv[argc - i - 1] = t;	
 	}

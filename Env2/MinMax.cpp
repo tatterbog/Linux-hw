@@ -17,12 +17,12 @@ int main(int argc, char* argv[]){
 	}
 
 	if(max < a){
-                max = a;
-        }
+        max = a;
+    }
 
-        if(max < b){
-                max = b;
-        }
+    if(max < b){
+        max = b;
+	}
 
 
 	std::cout << "Min: " << min << ", Max: " << max << "\n";

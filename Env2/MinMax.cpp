@@ -8,7 +8,7 @@ int main(int argc, char* argv[]){
 		return 1;
 	}
 	
-	for(int i = 1; i < 3; i++){
+	for(int i = 1; i <= 3; i++){
 		char* a = argv[i];
 	        if(*a == '-'){
 			a++;
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]){
 				std::cout << "Arguments must have an integer value\n"; 
 			return 3;
 			}
-			*a++;
+			a++;
 		}
 	}
 

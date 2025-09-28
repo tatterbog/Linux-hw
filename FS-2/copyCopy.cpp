@@ -24,7 +24,7 @@ int main(int argc, char* argv[]){
         if(desFd < 0){
                 const char* err = "destination file opening error\n";
                 write(STDERR_FILENO, err, strlen(err));
-		close(srcFd);
+		        close(srcFd);
                 return 3;
         }
 
@@ -49,14 +49,14 @@ int main(int argc, char* argv[]){
 	
 	if(readB < 0){
 		const char* err = "error reading from source file\n";
-                write(STDERR_FILENO, err, strlen(err));
+        write(STDERR_FILENO, err, strlen(err));
 		close(srcFd);
 		close(desFd);
 		return 5;
 	}
 	
 	close(srcFd);
-        close(desFd);
+    close(desFd);
 
 
 }

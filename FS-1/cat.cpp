@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 	if(readB < 0){
 	 	const char* err = "reading file error\n";
 		write(STDERR_FILENO, err, strlen(err));
-                close(fd);
+        close(fd);
 		return 4;
 	}
 

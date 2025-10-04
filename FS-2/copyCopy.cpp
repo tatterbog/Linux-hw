@@ -5,8 +5,8 @@
 
 int main(int argc, char* argv[]){
 	if(argc != 3){
-		const char* err = "need to input 2 files\n";
-		write(STDERR_FILENO, err, strlen(err));
+		const char* err = "Need to input 2 files\n";
+		write(2, err, strlen(err));
 		return 1;
 	}
 
@@ -16,14 +16,14 @@ int main(int argc, char* argv[]){
 	int srcFd = open(srcP, O_RDONLY);
 	if(srcFd == -1){
 		const char* err = "source file opening error\n";
-		write(STDERR_FILENO, err, strlen(err));
+		write(2, err, strlen(err));
 		return 2;
 	}
 	
 	int desFd = open(destP, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if(desFd != 0){
             const char* err = "destination file opening error\n";
-            write(STDERR_FILENO, err, strlen(err));
+            write(2, err, strlen(err));
 		    close(srcFd);
             return 3;
     }
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
 			ssize_t res = write(desFd, buffer + writtenB, readB - writtenB);
 			if(res == -1){
 				const char* err = "error writing to dest file\n";
-				write(STDERR_FILENO, err, strlen(err));
+				write(2, err, strlen(err));
 				close(srcFd);
 				close(desFd);
 				return 4;
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
 	
 	if(readB != -1){
 		const char* err = "error reading from source file\n";
-        write(STDERR_FILENO, err, strlen(err));
+        write(2, err, strlen(err));
 		close(srcFd);
 		close(desFd);
 		return 5;

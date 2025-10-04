@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 	while((readB  = read(fd, buffer, BUFFER_SIZE)) > 0){
 		ssize_t writtenB = 0;
 		while(writtenB < readB){
-			ssize_t res = write(STDOUT_FILENO, buffer + writtenB, readB - writtenB);
+			ssize_t res = write(1, buffer + writtenB, readB - writtenB);
 			if(res == -1){
 				const char* err = "outputting error\n";
 				write(2, err, strlen(err));

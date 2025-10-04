@@ -6,7 +6,7 @@
 int main(int argc, char* argv[]){
 	if(argc != 2){
 		const char* err = "Wrong amount of elements\n";
-		write(STDERR_FILENO, err, strlen(err));
+		write(2, err, strlen(err));
 		return 1;
 	}
 
@@ -14,9 +14,9 @@ int main(int argc, char* argv[]){
 	int fd = open(filePath, O_RDONLY);
 	if(fd == -1){
 		const char* err = "Error opening this file: ";
-		write(STDERR_FILENO, err, strlen(err));
-		write(STDERR_FILENO, filePath, strlen(filePath));
-		write(STDERR_FILENO, "\n", 1);
+		write(2, err, strlen(err));
+		write(2, filePath, strlen(filePath));
+		write(2, "\n", 1);
 		return 2;
 	}
 
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
 			ssize_t res = write(STDOUT_FILENO, buffer + writtenB, readB - writtenB);
 			if(res == -1){
 				const char* err = "outputting error\n";
-				write(STDERR_FILENO, err, strlen(err));
+				write(2, err, strlen(err));
 				close(fd);
 				return 3;
 			}
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
 
 	if(readB == -1){
 	 	const char* err = "reading file error\n";
-		write(STDERR_FILENO, err, strlen(err));
+		write(2, err, strlen(err));
         close(fd);
 		return 4;
 	}

@@ -28,14 +28,14 @@ int main(int argc, char* argv[]){
             return 3;
     }
 
-	const size_t BUFF_SIZE = 4096;
-	char buffer[BUFF_SIZE];
+	const size_t buffSize = 4096;
+	char buff[buffSize];
 
 	ssize_t readB;
-	while((readB = read(srcFd, buffer, BUFF_SIZE)) > 0){
+	while((readB = read(srcFd, buff, buffSize)) > 0){
 		ssize_t writtenB = 0;
 		while(writtenB < readB){
-			ssize_t res = write(desFd, buffer + writtenB, readB - writtenB);
+			ssize_t res = write(desFd, buff + writtenB, readB - writtenB);
 			if(res == -1){
 				const char* err = "error writing to dest file\n";
 				write(2, err, strlen(err));

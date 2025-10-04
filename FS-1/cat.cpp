@@ -20,15 +20,15 @@ int main(int argc, char* argv[]){
 		return 2;
 	}
 
-	const size_t BUFFER_SIZE = 4096;
-	char buffer[BUFFER_SIZE];
+	const size_t buffSize = 4096;
+	char buff[buffSize];
 
 	ssize_t readB;
 
-	while((readB  = read(fd, buffer, BUFFER_SIZE)) > 0){
+	while((readB  = read(fd, buff, buffSize)) > 0){
 		ssize_t writtenB = 0;
 		while(writtenB < readB){
-			ssize_t res = write(1, buffer + writtenB, readB - writtenB);
+			ssize_t res = write(1, buff + writtenB, readB - writtenB);
 			if(res == -1){
 				const char* err = "outputting error\n";
 				write(2, err, strlen(err));

@@ -24,20 +24,15 @@ int main(int argc, char* argv[]){
 	char buff[buffSize];
 
 	ssize_t readB;
-
-	while((readB  = read(fd, buff, buffSize)) > 0){
-		ssize_t writtenB = 0;
-		while(writtenB < readB){
-			ssize_t res = write(1, buff + writtenB, readB - writtenB);
-			if(res == -1){
-				const char* err = "outputting error\n";
-				write(2, err, strlen(err));
-				close(fd);
-				return 3;
-			}
-			writtenB += res;
-		}
-	}
+    while ((readB = read(fd, buff, buffSize)) > 0) {
+		ssize_t written = write(1, buff, readB);
+        if (written == -1) {
+            const char* err = "outputting error\n";
+            write(2, err, strlen(err));
+            close(fd);
+            return 3;
+        }
+    }
 
 	if(readB == -1){
 	 	const char* err = "reading file error\n";

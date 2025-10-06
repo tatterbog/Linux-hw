@@ -33,22 +33,18 @@ int main(int argc, char* argv[]){
 
 	ssize_t readB;
 	while((readB = read(srcFd, buff, buffSize)) > 0){
-		ssize_t writtenB = 0;
-		while(writtenB < readB){
-			ssize_t res = write(desFd, buff + writtenB, readB - writtenB);
-			if(res == -1){
-				const char* err = "error writing to dest file\n";
-				write(2, err, strlen(err));
-				close(srcFd);
-				close(desFd);
-				return 4;
-			}
-			writtenB += res;
-		}
+		ssize_t writtenB = write(desFd, buff, readB);
+        if (writtenB != readB) {
+            const char* err = "error writting to the destination file\n";
+        	write(2, err, strlen(err));
+			close(srcFd);
+			close(desFd);
+			return 4;
+        }
 	}
 	
 	if(readB != -1){
-		const char* err = "error reading from source file\n";
+		const char* err = "error reading from the source file\n";
         write(2, err, strlen(err));
 		close(srcFd);
 		close(desFd);
@@ -57,6 +53,5 @@ int main(int argc, char* argv[]){
 	
 	close(srcFd);
     close(desFd);
-
 
 }

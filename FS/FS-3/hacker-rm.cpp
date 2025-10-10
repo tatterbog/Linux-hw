@@ -16,30 +16,30 @@ int main(int argc, char* argv[]){
 	struct stat st;
 	if(stat(filePath, &st) == -1){
 		const char* err = "Stat failed\n";
-                write(2, err, strlen(err));
-                return 2;
+        write(2, err, strlen(err));
+        return 2;
 	}
 
 	if(!S_ISREG(st.st_mode)){
 		const char* err = "Not a regular file\n";
-                write(2, err, strlen(err));
-                return 3;
+         write(2, err, strlen(err));
+         return 3;
 	}
 
 	int fd = open(filePath, O_WRONLY);
 	if(fd == -1){
 		const char* err = "Couldn't open a file\n";
-                write(2, err, strlen(err));
-                return 4;
+        write(2, err, strlen(err));
+        return 4;
 	}
 
 
 	off_t size = lseek(fd, 0, SEEK_END);
 	if(size == -1){
 		const char* err = "Couldn't reach the end\n";
-                write(2, err, strlen(err));
+        write(2, err, strlen(err));
 		close(fd);
-                return 5;
+        return 5;
 	}	
 	
 	const int buffSize = 4096;
@@ -48,9 +48,9 @@ int main(int argc, char* argv[]){
 	
 	if(lseek(fd, 0, SEEK_SET) == -1){
 		const char* err = "Couldn't get back to start\n";
-                write(2, err, strlen(err));
+        write(2, err, strlen(err));
 		close(fd);
-                return 6;
+        return 6;
 	}
 
 	off_t bytesToWrite = size;
@@ -64,9 +64,9 @@ int main(int argc, char* argv[]){
 		ssize_t written = write(fd, buff, writeB);
 		if(written == -1){
 			const char* err = "Couldn't fill with nulls\n";
-                	write(2, err, strlen(err));
+            write(2, err, strlen(err));
 			close(fd);
-        	        return 7;
+        	return 7;
 		}
 		bytesToWrite -= written;
 	}	
@@ -76,8 +76,8 @@ int main(int argc, char* argv[]){
 	close(fd);
 	if(unlink(filePath) == -1){
 		const char* err = "Couldn't unlink\n";
-                write(2, err, strlen(err));
-                return 8;
+        write(2, err, strlen(err));
+        return 8;
 	}
 	
 }

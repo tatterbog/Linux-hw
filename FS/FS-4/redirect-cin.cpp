@@ -2,11 +2,12 @@
 #include <fcntl.h>
 #include <cstdlib>
 #include <iostream>
+#include <cstring>
 
 void initialize(int argc, char* argv[]){
 	if(argc != 2){
 		const char* err = "Wrong arguments\n";
-		write(2, err, sizeof(err) - 1);
+		write(2, err, strlen(err));
 		exit(1);
 	}
 
@@ -23,6 +24,7 @@ void initialize(int argc, char* argv[]){
 		close(fd);
 		exit(3);	
 	}
+	close(fd);
 }
 
 

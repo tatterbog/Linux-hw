@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 			pid_t pid = fork();
 			if(pid == -1){
 				std::cerr << "Fork error\n";
-        	                return 1;
+        	    return 1;
 			}
 
 			if(pid == 0){
@@ -101,8 +101,8 @@ int main(int argc, char** argv){
 				if(!old){
 					old = "";
 				}
-          	             	std::string newP = std::string(".:") + old;
-                	        setenv("PATH", newP.c_str(), 1);
+          	    std::string newP = std::string(".:") + old;
+                setenv("PATH", newP.c_str(), 1);
 			
 				execvp(args[index], &args[index]);
 				std::cerr << "Exec error\n";
@@ -134,8 +134,9 @@ int main(int argc, char** argv){
 				
 					else if(words[j] == "||" && exit == 0){
 						j++;
-						while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] !="||"){                                                	        j++;
-                                         	}
+						while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] !="||"){                                                	       
+							j++;
+                        }
 	
 					}
 

@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
 	}
 	
 	int desFd = open(destP, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if(desFd != 0){
+    if(desFd == -1){
             const char* err = "destination file opening error\n";
             write(2, err, strlen(err));
 		    close(srcFd);
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]){
         }
 	}
 	
-	if(readB != -1){
+	if(readB == -1){
 		const char* err = "error reading from the source file\n";
         write(2, err, strlen(err));
 		close(srcFd);

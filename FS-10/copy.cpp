@@ -16,32 +16,32 @@ int main(int argc, char* argv[]){
 	int src = open(srcP, O_RDONLY);
 	if(src == -1){
 		perror("Source open error");
-        	return 2;
+        return 1;
 	}
 
 
 	int dst = open(dstP, O_CREAT | O_TRUNC |  O_WRONLY, 0644);
-    	if(dst == -1){
-       	 	perror("Destination open error");
+    if(dst == -1){
+       	perror("Destination open error");
 		close(src);
-        	return 3;
-    	}
+    	return 1;
+    }
 
 
 	off_t size = lseek(src, 0, SEEK_END);
 	if(size == -1){
 		perror("lseek error");
-        	close(src);
+        close(src);
 		close(dst);
-        	return 4;
+        return 1;
 	}
 	
 
-    	if(lseek(src, 0, SEEK_SET) == -1){
+    if(lseek(src, 0, SEEK_SET) == -1){
 		perror("lseek error 2.0");
-        	close(src);
-       	 	close(dst);
-        	return 5;
+        close(src);
+       	close(dst);
+        return 1;
 	}
 
 	off_t data = 0;
@@ -62,14 +62,14 @@ int main(int argc, char* argv[]){
 		}
 
 		off_t hole = lseek(src, data1, SEEK_HOLE);
-        	if(hole == -1){
-            		hole = size;
-        	}
+        if(hole == -1){
+            hole = size;
+        }
 
 		if(hole <= data1){
-                        pos = hole;
-                        continue;
-                }
+            pos = hole;
+            continue;
+        }
 
 
 		lseek(src, data1, SEEK_SET);
@@ -87,9 +87,9 @@ int main(int argc, char* argv[]){
 
 			if(rd == -1){
 				perror("reading error");
-               		 	close(src);
-               	 		close(dst);
-        	   	 	return 6;
+               	close(src);
+               	close(dst);
+        	   	return 1;
 			}
 
 			if(rd == 0){
@@ -99,9 +99,9 @@ int main(int argc, char* argv[]){
 			ssize_t w = write(dst, buf, rd);
 			if(w != rd){
 				perror("writing error");
-                	 	close(src);
-               		 	close(dst);
-               		 	return 7;
+                close(src);
+               	close(dst);
+                return 1;
 			}
 			cp -= w;
 			data += w;
@@ -109,23 +109,20 @@ int main(int argc, char* argv[]){
 		pos = hole;
 	}
 	
-	if(size > 0){
-        	if (lseek(dst, size - 1, SEEK_SET) == -1 || write(dst, "", 1 != 1)){
-            perror("extend error");
-            close(src);
-            close(dst);
-            return 8;
-        	}
-	}
-
-    
-  
 	
+    if (size > 0 && (lseek(dst, size - 1, SEEK_SET) == -1 || write(dst, "", 1 != 1))){
+        perror("extend error");
+        close(src);
+		close(dst);
+        return 1;
+    }
+	
+
 	if(ftruncate(dst, size) == -1){
 		perror("truncating error");
-       		close(src);
-        	close(dst);
-       	 	return 10;
+       	close(src);
+        close(dst);
+       	return 1;
 	}
 	
 	holes = size - data;
@@ -135,4 +132,5 @@ int main(int argc, char* argv[]){
 	close(dst);
 
 }
+
 

@@ -120,7 +120,7 @@ int main(int argc, char* argv[]){
 	}
 	
 	
-    if (size > 0 && (lseek(dst, size - 1, SEEK_SET) == -1 || write(dst, "", 1 != 1))){
+    if (size > 0 && (lseek(dst, size - 1, SEEK_SET) == -1 || write(dst, "", 1) != 1)){
         perror("extend error");
         close(src);
 		close(dst);
@@ -142,6 +142,7 @@ int main(int argc, char* argv[]){
 	close(dst);
 
 }
+
 
 
 

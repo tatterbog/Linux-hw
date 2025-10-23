@@ -113,21 +113,28 @@ int main(int argc, char* argv[]){
                	close(dst);
                 return 1;
 			}
-			cp -= w;
-			data += w;
+			cp -= rd;
+			data += rd;
 		}
 		pos = hole;
 	}
 	
 	
-    if (size > 0 && (lseek(dst, size - 1, SEEK_SET) == -1 || write(dst, "", 1) != 1)){
+    if (size > 0 && lseek(dst, size - 1, SEEK_SET) == -1 ){
         perror("extend error");
         close(src);
 		close(dst);
         return 1;
     }
 	
-
+	char z = '\0';
+	if (size > 0 && write(dst, &z, 1) != 1){
+        perror("extend writing error");
+        close(src);
+		close(dst);
+        return 1;
+    }
+	
 	if(ftruncate(dst, size) == -1){
 		perror("truncating error");
        	close(src);
@@ -136,12 +143,13 @@ int main(int argc, char* argv[]){
 	}
 	
 	holes = size - data;
-	std::cout << "Succesfully copied " << size << " bytes (Data: " << data << ", Hole: " << holes << ")\n"; 	
+	std::cout << "Successfully copied " << size << " bytes (Data: " << data << ", Hole: " << holes << ")\n"; 	
 
 	close(src);
 	close(dst);
 
 }
+
 
 
 

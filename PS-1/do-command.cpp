@@ -10,14 +10,14 @@ void do_command(char** argv){
 	
 
 	if(pid == -1){
-		write(2, "Fork failed\n", 11);
+		write(2, "Fork failed\n", 12);
 		exit(1);
 	}
 
 	if(pid == 0){
 		execvp(argv[0], argv);
-		write(2, "Exec failed\n", 11);
-		exit(1);
+		write(2, "Exec failed\n", 12);
+		_exit(1);
 	}
 
 	else{
@@ -47,7 +47,6 @@ int main(int argc, char** argv){
 		std::cout << "Not enough arguments\n";
 		return 1;
 	}
-
 	
 	do_command(argv + 1);
 }

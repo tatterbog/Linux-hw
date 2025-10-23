@@ -71,9 +71,19 @@ int main(int argc, char* argv[]){
             continue;
         }
 
-
-		lseek(src, data1, SEEK_SET);
-		lseek(dst, data1, SEEK_SET);
+		if (lseek(src, data1, SEEK_SET) == -1){
+			perror("Source cursor setter error");
+        	close(src);
+       		close(dst);
+        	return 1;
+		}
+		
+		if (lseek(dst, data1, SEEK_SET) == -1){
+			perror("Destination cursor setter error");
+        	close(src);
+       		close(dst);
+        	return 1;
+		}
 
 		off_t cp = hole - data1;
 		while(cp > 0){
@@ -132,5 +142,6 @@ int main(int argc, char* argv[]){
 	close(dst);
 
 }
+
 
 

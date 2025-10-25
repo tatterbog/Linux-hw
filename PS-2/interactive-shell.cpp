@@ -17,7 +17,7 @@ int forkCommands(char **args, int fd, bool silent) {
         if (silent){
             std::string file = std::to_string(getpid()) + ".log";
             int fd2 = creat(file.c_str(), 0644);
-            if (fd2 == -1) {
+            if (fd2 == -1){
                 std::cerr << "Creating error\n";
                 exit(1);
             }
@@ -31,7 +31,9 @@ int forkCommands(char **args, int fd, bool silent) {
         }
 
         const char *old = getenv("PATH");
-        if (!old) old = "";
+        if (!old){
+            old = "";
+        }
         std::string newPath = std::string(".:") + old;
         setenv("PATH", newPath.c_str(), 1);
 
@@ -42,27 +44,47 @@ int forkCommands(char **args, int fd, bool silent) {
 
     int status;
     waitpid(pid, &status, 0);
-    if (fd != -1) close(fd);
-
-    if (WIFEXITED(status)) return WEXITSTATUS(status);
-    else if (WIFSIGNALED(status)) return WTERMSIG(status);
+    if (fd != -1){
+        close(fd);
+    }
+    
+    if (WIFEXITED(status)){
+        return WEXITSTATUS(status);
+    }
+        
+    else if(WIFSIGNALED(status)){
+        return WTERMSIG(status);
+    }
     return -1;
 }
 
 int main(int argc, char** argv){
     std::string str;
     while(true){
-        if(!std::getline(std::cin, str)) return 0;
-        if(str.empty()) continue;
-        if(str == "exit") return 0;
-
+        if(!std::getline(std::cin, str)){
+            return 0;
+        }
+        
+        if(str.empty()){
+            continue;
+        }
+        
+        if(str == "exit"){
+            return 0;
+        }
+        
         std::istringstream line(str);
         std::string word;
         std::vector<std::string> words;
 
-        while(line >> word) words.push_back(word);
-        if(words.empty()) continue;
-
+        while(line >> word){
+            words.push_back(word);
+        }
+        
+        if(words.empty()){
+            continue;
+        }
+        
         for(int i = 0; i < words.size(); ) {
             std::vector<char *> args;
             int fd = -1;
@@ -72,8 +94,12 @@ int main(int argc, char** argv){
             for(; j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||"; j++){
                 if((words[j] == ">" || words[j] == ">>") && j + 1 < words.size()){
                     int flags = O_CREAT | O_WRONLY;
-                    if(words[j] == ">") flags |= O_TRUNC;
-                    else flags |= O_APPEND;
+                    if(words[j] == ">"){
+                        flags |= O_TRUNC;
+                    }
+                    else{
+                        flags |= O_APPEND;
+                    }
                     fd = open(words[j + 1].c_str(), flags, 0644);
                     if(fd == -1){
                         std::cerr << "Open error\n";
@@ -101,11 +127,15 @@ int main(int argc, char** argv){
                 std::string op = words[j];
                 if(op == "&&" && exitCode != 0){
                     j++;
-                    while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||") j++;
+                    while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||") {
+                        j++;
+                    }
                 }
                 else if(op == "||" && exitCode == 0){
                     j++;
-                    while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||") j++;
+                    while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||"){
+                        j++;
+                    }
                 }
                 else{
                     j++;

@@ -53,9 +53,21 @@ int main(int argc, char* argv[]){
 	while(pos < size){
 		off_t data1 = lseek(src, pos, SEEK_DATA);
 		if(data1 == -1){
-			pos = size;
-			break;
-		}		
+            if(errno == ENXIO){
+                holes += size - pos;
+                if(ftruncate(dst, size) == -1){
+                    perror("truncating error");
+                    close(src);
+                    close(dst);
+                    return 1;
+                }
+                break;
+            }
+            perror("SEEK_DATA error");
+            close(src);
+            close(dst);
+            return 1;
+        }	
 
 		if(data1 > pos){
 			holes += data1 - pos;
@@ -119,22 +131,6 @@ int main(int argc, char* argv[]){
 		pos = hole;
 	}
 	
-	
-    if (size > 0 && lseek(dst, size - 1, SEEK_SET) == -1 ){
-        perror("extend error");
-        close(src);
-		close(dst);
-        return 1;
-    }
-	
-	char z = '\0';
-	if (size > 0 && write(dst, &z, 1) != 1){
-        perror("extend writing error");
-        close(src);
-		close(dst);
-        return 1;
-    }
-	
 	if(ftruncate(dst, size) == -1){
 		perror("truncating error");
        	close(src);
@@ -149,6 +145,7 @@ int main(int argc, char* argv[]){
 	close(dst);
 
 }
+
 
 
 

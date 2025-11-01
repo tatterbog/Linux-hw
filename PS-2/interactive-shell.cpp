@@ -51,8 +51,7 @@ int forkCommands(char **args, int fd, bool silent) {
     if (WIFEXITED(status)){
         return WEXITSTATUS(status);
     }
-        
-    else if(WIFSIGNALED(status)){
+    else if (WIFSIGNALED(status)){
         return WTERMSIG(status);
     }
     return -1;
@@ -85,59 +84,60 @@ int main(int argc, char** argv){
             continue;
         }
         
-        for(int i = 0; i < words.size(); ) {
-            std::vector<char *> args;
+        for (int i = 0; i < (int)words.size(); ) {
+            std::vector<char*> args;
             int fd = -1;
             bool silent = false;
             int j = i;
 
-            for(; j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||"; j++){
-                if((words[j] == ">" || words[j] == ">>") && j + 1 < words.size()){
+            for (; j < (int)words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||"; j++){
+                if ((words[j] == ">" || words[j] == ">>") && j + 1 < (int)words.size()) {
                     int flags = O_CREAT | O_WRONLY;
-                    if(words[j] == ">"){
-                        flags |= O_TRUNC;
-                    }
-                    else{
-                        flags |= O_APPEND;
-                    }
+                    if (words[j] == ">") flags |= O_TRUNC;
+                    else flags |= O_APPEND;
                     fd = open(words[j + 1].c_str(), flags, 0644);
-                    if(fd == -1){
+                    if (fd == -1){
                         std::cerr << "Open error\n";
                         return 1;
                     }
                     j++;
-                }
-                else if(words[j] == "silent"){
+                } else if (words[j] == "silent"){
                     silent = true;
-                }
-                else{
+                } else {
                     args.push_back(&words[j][0]);
                 }
             }
 
             args.push_back(nullptr);
-            if(args[0] == nullptr){
+            if (args[0] == nullptr){
                 i = j + 1;
                 continue;
             }
 
             int exitCode = forkCommands(args.data(), fd, silent);
 
-            if(j < words.size()){
+            if (j < (int)words.size()) {
                 std::string op = words[j];
-                if(op == "&&" && exitCode != 0){
-                    j++;
-                    while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||") {
+                if (op == "&&") {
+                    if (exitCode != 0) {
+                        j++;
+                        while (j < (int)words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||"){
+                            j++;
+                        }
+                    } 
+                    else {
                         j++;
                     }
-                }
-                else if(op == "||" && exitCode == 0){
-                    j++;
-                    while(j < words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||"){
+                } else if (op == "||") {
+                    if (exitCode == 0) {
+                        j++;
+                        while (j < (int)words.size() && words[j] != ";" && words[j] != "&&" && words[j] != "||"){
+                            j++;
+                        }
+                    } else {
                         j++;
                     }
-                }
-                else{
+                } else { 
                     j++;
                 }
             }

@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     int M = atoi(argv[2]);
 
     if (M <= 0 || N <= 0){
-        std::cerr << "N and M must be positive integers\n";
+        std::cerr << "N and M must be positive\n";
         return 1;
     }
 
@@ -92,4 +92,5 @@ int main(int argc, char** argv)
     delete[] arr;
     return 0;
 }
+
 

@@ -31,6 +31,10 @@ int main(int argc, char** argv)
     long long N = atoll(argv[1]);
     int M = atoi(argv[2]);
 
+    if (M <= 0 || N <= 0){
+        std::cerr << "N and M must be positive integers\n";
+        return 1;
+    }
 
     int* arr = new int[N];
     for(long long i = 0; i < N; i++){
@@ -88,3 +92,4 @@ int main(int argc, char** argv)
     delete[] arr;
     return 0;
 }
+

@@ -66,6 +66,13 @@ int main(int argc, char** argv)
         tds[i].res = 0;
 
         if(pthread_create(&tds[i].id, nullptr, sum, &tds[i]) != 0){
+            for(int j = 0; j < i; j++){
+                pthread_cancel(tds[j]);
+            }
+            for(int j = 0; j < i; j++){
+                pthread_join(tds[j], nullptr);
+            }
+            
             std::cerr << "Thread creation failed\n";
             delete[] tds;
             delete[] arr;
@@ -92,5 +99,6 @@ int main(int argc, char** argv)
     delete[] arr;
     return 0;
 }
+
 
 

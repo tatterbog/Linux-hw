@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 
         if(pthread_create(&tds[i].id, nullptr, sum, &tds[i]) != 0){
             for(int j = 0; j < i; j++){
-                pthread_cancel(tds[j]);
+                pthread_cancel(tds[j].id);
             }
             for(int j = 0; j < i; j++){
                 pthread_join(tds[j], nullptr);
@@ -99,6 +99,7 @@ int main(int argc, char** argv)
     delete[] arr;
     return 0;
 }
+
 
 
 

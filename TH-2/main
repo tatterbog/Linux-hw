@@ -1,0 +1,22 @@
+#include <iostream>
+#include <unistd.h>
+#include "parallel_scheduler.h"
+
+
+void increment(int x){
+	std::cout << pthread_self() << ": " << ++x << '\n'; 
+}
+
+
+int main(){
+	
+	parallel_scheduler sched(3);
+
+	for(int i = 0; i < 5; i++){
+		sched.run(increment, i);
+	}
+
+	sleep(5);
+
+	
+}

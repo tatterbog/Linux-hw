@@ -22,7 +22,7 @@ private:
 		
 	std::queue<Func> funcs;
 		
-	static void* worker_entry(void* arg);
+	static void* worker_start(void* arg);
 
 
 	void worker_loop();

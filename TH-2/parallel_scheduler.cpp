@@ -37,7 +37,7 @@ parallel_scheduler::parallel_scheduler(int cap = 0) : capacity(cap){
 	tds = new pthread_t[capacity];
 
 	for(int i = 0; i < capacity; i++){
-		pthread_create(&tds[i], nullptr, worker_entry, this);
+		pthread_create(&tds[i], nullptr, worker_start, this);
 	}
 }
 

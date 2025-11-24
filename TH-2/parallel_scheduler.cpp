@@ -3,8 +3,8 @@
 
 void* parallel_scheduler::worker_start(void* arg){
 	parallel_scheduler* ps = (parallel_scheduler*)arg;
-        ps->worker_loop();
-        return nullptr;
+    ps->worker_loop();
+    return nullptr;
 }
 
 void parallel_scheduler::worker_loop(){

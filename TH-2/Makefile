@@ -1,14 +1,21 @@
-OBJS = main.o parallel_scheduler.o
+LIB_NAME = libparallel_scheduler.so
+LIB_CPP = parallel_scheduler.cpp
+LIB_H = parallel_scheduler.h
 
-TARGET = demo
 
-all: $(TARGET)
+all: $(LIB_NAME) main
 
-$(TARGET): $(OBJS)
-	g++ -o $(TARGET) $(OBJS)
+$(LIB_NAME): parallel_scheduler.o
+	g++ -shared -o $(LIB_NAME) parallel_scheduler.o -lpthread
 
-main.o: main.cpp parallel_scheduler.h
+parallel_scheduler.o: $(LIB_CPP) $(LIB_H)
+	g++ -c -fPIC $(LIB_CPP) -lpthread
+
+main: main.o $(LIB_NAME) 
+	g++ -o main main.o -L. -lparallel_scheduler -lpthread -Wl,-rpath,.
+
+main.o: main.cpp $(LIB_H)
 	g++ -c main.cpp
 
-parallel_scheduler.o: parallel_scheduler.h parallel_scheduler.cpp
-	g++ -c parallel_scheduler.cpp
+clean: 
+	rm -f *.o *.so main

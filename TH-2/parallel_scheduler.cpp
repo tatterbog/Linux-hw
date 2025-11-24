@@ -1,7 +1,7 @@
 #include "parallel_scheduler.h"
 
 
-void* parallel_scheduler::worker_entry(void* arg){
+void* parallel_scheduler::worker_start(void* arg){
 	parallel_scheduler* ps = (parallel_scheduler*)arg;
         ps->worker_loop();
         return nullptr;

@@ -2,15 +2,15 @@
 #include <unistd.h>
 
 bool isPrime(int x){
-	if(x < 2){
-		return false;
-	}
-
-	if(x & 1 == 0){
+	if(x == 2){
 		return true;
 	}
+
+	if(x < 2 || (x & 1) == 0){
+		return false;
+	}
 	
-	for(int i = 3; i * i < x; i++){
+	for(int i = 3; i * i <= x; i += 2){
 		if(x % i == 0){
 			return false;
 		}
@@ -20,12 +20,12 @@ bool isPrime(int x){
 }
 
 int NthNumber(int n){
-	int i = 2;
-	while(n > 1){
+	int i = 1;
+	while(n > 0){
+		i++;
 		if(isPrime(i)){
 			n--;
 		}	
-		i++;
 	}
 	return i;
 }
@@ -43,7 +43,7 @@ int main(){
 	pid_t pid = fork();
 	
 	if(pid > 0){
-		close(pfdWR[1]);
+		close(pfdWR[0]);
 		close(pfdRW[1]);
 
 		std::string str;
@@ -68,35 +68,39 @@ int main(){
 				return 1;
 			}
 
-			std::cout << "[Parent] Sending " << x << "to the child process";
-			int wb = write(pfdWR[0], &x, sizeof(x));
+			std::cout << "[Parent] Sending " << x << "to the child process\n";
+			int wb = write(pfdWR[1], &x, sizeof(x));
 			if(wb != sizeof(x)){
 				std::cerr << "Write failed\n";
 				return 1;
 			}
 
-			std::cout << "[Parent] Waiting for the child";
+			std::cout << "[Parent] Waiting for the child\n";
 			int prime;
 			int rd = read(pfdRW[0], &prime, sizeof(prime));
 			if(rd == -1){
 				std::cerr << "Read failed\n";
 				return 1;
 			}
-			std::cout << "Recieved calculation result of prime(" << x << ") = " << prime << '\n';  
+			std::cout << "[Parent] Recieved calculation result of prime(" << x << ") = " << prime << '\n';  
 
 		}
-		close(pfdWR[0]);
+		close(pfdWR[1]);
 		close(pfdRW[0]);
 	}
 
 	else if(pid == 0){
-		close(pfdWR[0]);
+		close(pfdWR[1]);
                 close(pfdRW[0]);
 
 		while(true){
 			int x;	
-			int rd = read(pfdWR[1], &x, sizeof(x));
-                        if(rd <= 0){
+			int rd = read(pfdWR[0], &x, sizeof(x));
+                        if(rd == 0){
+				return 0;
+			}
+			
+			if(rd == -1){
                                 std::cerr << "Read failed\n";
                                 return 1;
                         }
@@ -104,15 +108,16 @@ int main(){
 			std::cout << "[Child] Calculating the " <<x << "-th prime number\n";
 			int prime = NthNumber(x);
 
+			std::cout << "[Child] Sending the result\n";
+
 			int wb = write(pfdRW[1], &prime, sizeof(prime));
                         if(wb != sizeof(prime)){
                                 std::cerr << "Write failed\n";
                                 return 1;
                         }
-			std::cout << "[Child] Sending the result\n";
 		}
 
-		close(pfdWR[1]);
+		close(pfdWR[0]);
                 close(pfdRW[1]);
 
 	}

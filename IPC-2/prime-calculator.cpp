@@ -91,19 +91,19 @@ int main(){
 
 	else if(pid == 0){
 		close(pfdWR[1]);
-                close(pfdRW[0]);
+        close(pfdRW[0]);
 
 		while(true){
 			int x;	
 			int rd = read(pfdWR[0], &x, sizeof(x));
-                        if(rd == 0){
+            if(rd == 0){
 				return 0;
 			}
 			
 			if(rd == -1){
-                                std::cerr << "Read failed\n";
-                                return 1;
-                        }
+                std::cerr << "Read failed\n";
+                return 1;
+            }
 
 			std::cout << "[Child] Calculating the " <<x << "-th prime number\n";
 			int prime = NthNumber(x);
@@ -111,20 +111,20 @@ int main(){
 			std::cout << "[Child] Sending the result\n";
 
 			int wb = write(pfdRW[1], &prime, sizeof(prime));
-                        if(wb != sizeof(prime)){
-                                std::cerr << "Write failed\n";
-                                return 1;
-                        }
+            if(wb != sizeof(prime)){
+            	std::cerr << "Write failed\n";
+            	return 1;
+            }
 		}
 
 		close(pfdWR[0]);
-                close(pfdRW[1]);
+    	close(pfdRW[1]);
 
 	}
 
 	else{
 		std::cerr << "Fork failed\n";
-                return 1;
+    	return 1;
 	}
 
 }

@@ -53,7 +53,7 @@ int main(){
 
 	if(sigaction(SIGUSR1, &sa, nullptr) == -1){
 		std::cerr << "Sigaction failed\n";
-                return 1;
+        return 1;
 	}
 
 	while(true){

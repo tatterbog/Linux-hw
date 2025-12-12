@@ -40,7 +40,7 @@ class shared_array {
 		}
 
 		int& operator[](size_t index){
-			if(index < 0 && index >= size){
+			if(index >= size){
 				throw std::out_of_range("Indexing out of bounds");
 			}
 			return arr[index];

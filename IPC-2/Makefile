@@ -1,6 +1,7 @@
-TARGET = signal-echo
+TARGET = prime-calculator
 
-SRC = signal-echo.cpp
+SRC = prime-calculator.cpp
+
 
 all: $(TARGET)
 

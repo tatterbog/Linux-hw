@@ -22,6 +22,7 @@ class shared_array {
 			}
 
 			if(ftruncate(fd, size * sizeof(int)) == -1){
+				shm_unlink(name.c_str());
 				perror("Ftruncate");
 				exit(EXIT_FAILURE);
 			}
@@ -34,6 +35,7 @@ class shared_array {
 					0);
 
 			if(arr == MAP_FAILED){
+				shm_unlink(name.c_str());
 				perror("mmap");
 				close(fd);
 			}
@@ -48,6 +50,7 @@ class shared_array {
 	
 		~shared_array(){
 			munmap(arr, size * sizeof(int));
+			shm_unlink(name.c_str());
 			close(fd);
 		}
 };

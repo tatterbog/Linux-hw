@@ -13,6 +13,10 @@ sem_t* get_semaphore(const std::string& str){
 int main(){
 	shared_array arr("arr", 10);
 	sem_t* sem = get_semaphore("arr");
+	if(sem == SEM_FAILED){
+		perror("Semaphore");
+		exit(EXIT_FAILURE);
+	}
 
 
 	while(true){

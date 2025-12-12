@@ -14,11 +14,11 @@ int main(){
 	sem_t* sem = get_semaphore("arr");
 	
 	if(sem == SEM_FAILED){
-                perror("Semaphore");
-                exit(EXIT_FAILURE);
-        }
+        perror("Semaphore");
+        exit(EXIT_FAILURE);
+    }
 	
-	int i = 0;
+	
 	while(true){
 		sem_wait(sem);
 		std::cout << arr[0] << ' ' << arr[1] << '\n';

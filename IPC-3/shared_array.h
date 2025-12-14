@@ -74,6 +74,7 @@ class shared_array {
 				shm_unlink(name.c_str());
 				perror("mmap");
 				close(fd);
+				exit(EXIT_FAILURE);
 			}
 		}
 

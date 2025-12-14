@@ -17,10 +17,10 @@ class shared_array {
 			if(arr){
 				munmap(arr, size * sizeof(int));
 				arr = nullptr;
-                 	}
+            }
 
 			if(fd != -1){
-                        	close(fd);
+                close(fd);
 				fd = -1;
 			}
 		}
@@ -44,7 +44,7 @@ class shared_array {
 			if(fstat(fd, &st) < 0){
 				perror("fstat");
 				close(fd);
-				exit(EXIT_FAILURE);;
+				exit(EXIT_FAILURE);
 			}
 
 
@@ -62,6 +62,7 @@ class shared_array {
 				close(fd);
 				exit(EXIT_FAILURE);
 			}
+			
 			arr = (int *)mmap(nullptr,
 					size * sizeof(int),
 					PROT_READ | PROT_WRITE,
@@ -92,18 +93,18 @@ class shared_array {
 
 
 		shared_array& operator=(shared_array&& oth){
-                        if(this != &oth){
+            if(this != &oth){
 				destroyer();
 
 				fd = oth.fd;
-                	        arr = oth.arr;
-                        	size = oth.size;
-                        	name = std::move(oth.name);
+                arr = oth.arr;
+                size = oth.size;
+                name = std::move(oth.name);
 	
-        	                oth.fd = -1;
-                	        oth.arr = nullptr;
-                       		oth.size = 0;
-                	} 
+        	    oth.fd = -1;
+                oth.arr = nullptr;
+                oth.size = 0;
+            } 
 
 			return *this;
 		}

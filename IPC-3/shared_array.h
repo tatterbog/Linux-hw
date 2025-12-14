@@ -26,7 +26,7 @@ class shared_array {
 		}
 
 	public:
-		shared_array(const std::string& name = "", size_t size = 0) : size(size), name('/' + name){
+		shared_array(const std::string& name = "", size_t size = 0) : size(size), name("/" + name){
 
 			if(size == 0){
 				std::cerr << "Size is 0\n";

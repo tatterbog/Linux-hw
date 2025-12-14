@@ -42,6 +42,7 @@ class shared_array {
 
 			struct stat st;
 			if(fstat(fd, &st) < 0){
+				shm_unlink(name.c_str());
 				perror("fstat");
 				close(fd);
 				exit(EXIT_FAILURE);

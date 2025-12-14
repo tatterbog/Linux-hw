@@ -1,10 +1,10 @@
 #include "parallel_scheduler.h"
 
 
-void* parallel_scheduler::worker_entry(void* arg){
+void* parallel_scheduler::worker_start(void* arg){
 	parallel_scheduler* ps = (parallel_scheduler*)arg;
-        ps->worker_loop();
-        return nullptr;
+    ps->worker_loop();
+    return nullptr;
 }
 
 void parallel_scheduler::worker_loop(){
@@ -37,7 +37,7 @@ parallel_scheduler::parallel_scheduler(int cap = 0) : capacity(cap){
 	tds = new pthread_t[capacity];
 
 	for(int i = 0; i < capacity; i++){
-		pthread_create(&tds[i], nullptr, worker_entry, this);
+		pthread_create(&tds[i], nullptr, worker_start, this);
 	}
 }
 

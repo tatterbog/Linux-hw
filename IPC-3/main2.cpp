@@ -17,8 +17,7 @@ int main(){
 	if(sem == SEM_FAILED){
         perror("Semaphore");
         exit(EXIT_FAILURE);
-  }
-	
+  	}
 	
 	while(true){
 		sem_wait(sem);

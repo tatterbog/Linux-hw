@@ -2,6 +2,8 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include "shared_array.h"
+#include <signal.h>
+
 
 
 sem_t* get_semaphore(const std::string& str){ 
@@ -12,6 +14,7 @@ sem_t* get_semaphore(const std::string& str){
 
 int main(){
 	shared_array arr("arr", 10);
+
 	sem_t* sem = get_semaphore("arr");
 	if(sem == SEM_FAILED){
 		perror("Semaphore");
@@ -27,5 +30,5 @@ int main(){
 
 		sleep(1);
 	}
-
+	
 }

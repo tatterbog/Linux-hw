@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "shared_array.h"
 
+
 sem_t* get_semaphore(const std::string& str){ 
 	std::string name = '/' + str + "_sem";
 	return sem_open(name.c_str(), O_CREAT, 0666, 1);
@@ -11,12 +12,12 @@ sem_t* get_semaphore(const std::string& str){
 
 int main(){
 	shared_array arr("arr", 10);
+
 	sem_t* sem = get_semaphore("arr");
-	
 	if(sem == SEM_FAILED){
         perror("Semaphore");
         exit(EXIT_FAILURE);
-    }
+  }
 	
 	
 	while(true){

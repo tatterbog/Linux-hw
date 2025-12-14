@@ -2,9 +2,6 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include "shared_array.h"
-#include <signal.h>
-
-
 
 sem_t* get_semaphore(const std::string& str){ 
 	std::string name = "/" + str + "_sem";

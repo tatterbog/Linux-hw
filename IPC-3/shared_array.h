@@ -37,27 +37,27 @@ class shared_array {
 				exit(EXIT_FAILURE); 
 			}
 
-		       	struct stat st; 
+		    struct stat st; 
 			if(fstat(fd, &st) < 0){ 
 				perror("fstat");
-			       	close(fd);
-			       	exit(EXIT_FAILURE); 
+			    close(fd);
+			    exit(EXIT_FAILURE); 
 			} 
 
 			if(st.st_size == 0){ 
 				if(ftruncate(fd, size * sizeof(int)) == -1){
 				       	shm_unlink(name.c_str()); 
-					perror("Ftruncate"); 
-					close(fd); 
-					exit(EXIT_FAILURE); 
+						perror("Ftruncate"); 
+						close(fd); 
+						exit(EXIT_FAILURE); 
 				} 
 			} else if(st.st_size != (size * sizeof(int))){ 
-				std::cerr << "Sizes are not equal\n";
+					std::cerr << "Sizes are not equal\n";
 			       	close(fd);
 			       	exit(EXIT_FAILURE); 
 			} 
 			arr = (int *)mmap(nullptr, size * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-		       	if(arr == MAP_FAILED){
+		    if(arr == MAP_FAILED){
 			       	shm_unlink(name.c_str());
 			       	perror("mmap"); 
 				close(fd); 
@@ -65,36 +65,36 @@ class shared_array {
 		} 
 		
 		shared_array(const shared_array&) = delete;
-	       	shared_array& operator=(const shared_array&) = delete; 
+	    shared_array& operator=(const shared_array&) = delete; 
 		
 		shared_array(shared_array&& oth){ 
 			fd = oth.fd; arr = oth.arr;
-		       	size = oth.size; 
+		    size = oth.size; 
 			name = std::move(oth.name);
 		       
 			oth.fd = -1;
-		       	oth.arr = nullptr;
-		       	oth.size = 0;
-	       	}
+		    oth.arr = nullptr;
+		    oth.size = 0;
+	    }
 	       
 		shared_array& operator=(shared_array&& oth){
-		       	if(this != &oth){ 
+		    if(this != &oth){ 
 				destroyer(); 
 				fd = oth.fd; 
 				arr = oth.arr;
-			       	size = oth.size; 
+			    size = oth.size; 
 				name = std::move(oth.name); 
 				
 				oth.fd = -1;
-			       	oth.arr = nullptr;
-			       	oth.size = 0; 
+			    oth.arr = nullptr;
+			    oth.size = 0; 
 			} 
 			return *this; 
 		}
 
-	       	int& operator[](size_t index){
-		       	if(index >= size){
-			       	throw std::out_of_range("Indexing out of bounds"); 
+	    int& operator[](size_t index){
+		    if(index >= size){
+			    throw std::out_of_range("Indexing out of bounds"); 
 			} 
 			return arr[index]; 
 		} 

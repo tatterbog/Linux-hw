@@ -12,32 +12,32 @@ void stopper(int){
 
 sem_t* get_semaphore(const std::string& str){
 	std::string sem_name = "/" + str + "_sem";
-       	return sem_open(sem_name.c_str(), O_CREAT, 0666, 1);
+    return sem_open(sem_name.c_str(), O_CREAT, 0666, 1);
 } 
 
 int main(){ 
 	struct sigaction sa = {};
-       	sa.sa_handler = stopper; 
+    sa.sa_handler = stopper; 
 	
 	if(sigaction(SIGINT, &sa, nullptr) == -1){
-	       	std::cerr << "Sigaction failed/n"; 
+	    std::cerr << "Sigaction failed/n"; 
 		exit(EXIT_FAILURE);
-       	}
+    }
        
 	std::string name = "arr";
 	shared_array arr(name, 10); 
 	sem_t* sem = get_semaphore(name);
 
-       	if(sem == SEM_FAILED){
-	       	arr.unlink();	
+    if(sem == SEM_FAILED){
+	    arr.unlink();	
 		perror("sem_open");
-	       	exit(EXIT_FAILURE); 
+	    exit(EXIT_FAILURE); 
 	}
 
-       	while(!stop){ 
+    while(!stop){ 
 		sem_wait(sem); 
 		arr[0]++;
-	       	arr[1]++; 
+	    arr[1]++; 
 		sem_post(sem); 
 
 		sleep(1); 

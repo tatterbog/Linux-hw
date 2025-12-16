@@ -11,6 +11,7 @@ class shared_array {
 		int fd = -1;
 		int* arr = nullptr;
 		size_t size;
+
 		std::string name;
 
 		void destroyer(){
@@ -23,10 +24,12 @@ class shared_array {
                         	close(fd);
 				fd = -1;
 			}
+			
+
 		}
 
 	public:
-		shared_array(const std::string& name = "", size_t size = 0) : size(size), name('/' + name){
+		shared_array(const std::string& name = "", size_t size = 0) : size(size), name("/" + name){
 
 			if(size == 0){
 				std::cerr << "Size is 0\n";
@@ -116,6 +119,12 @@ class shared_array {
 			return arr[index];
 		}
 	
+		void unlink(){
+			if(!name.empty()){
+				shm_unlink(name.c_str());
+			}
+		}
+
 		~shared_array(){
 			destroyer();
 		}

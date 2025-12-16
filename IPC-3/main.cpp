@@ -4,23 +4,64 @@
 #include "shared_array.h"
 #include <signal.h>
 
+sem_t* sem = nullptr;
+shared_array* arr_ptr = nullptr;
+std::string sem_name = "";
 
 
-sem_t* get_semaphore(const std::string& str){ 
-	std::string name = "/" + str + "_sem";
-	return sem_open(name.c_str(), O_CREAT, 0666, 1);
-}
-
-
-int main(){
-	shared_array arr("arr", 10);
-
-	sem_t* sem = get_semaphore("arr");
-	if(sem == SEM_FAILED){
-		perror("Semaphore");
-		exit(EXIT_FAILURE);
+void destroyer(){
+	if(sem){
+		sem_close(sem);
+		sem_unlink(sem_name.c_str());
 	}
 
+	if(arr_ptr){
+		arr_ptr->unlink();
+	}
+
+	_exit(0);	
+}
+
+void destroyer(int){
+	if(sem){
+                sem_close(sem);
+                sem_unlink(sem_name.c_str());
+        }
+
+        if(arr_ptr){
+                arr_ptr->unlink();
+        }
+
+        _exit(0);
+}
+
+sem_t* get_semaphore(const std::string& str){
+	sem_name = "/" + str + "_sem";
+	return sem_open(sem_name.c_str(), O_CREAT, 0666, 1);
+}
+
+int main(){
+	struct sigaction sa = {};
+	sa.sa_handler = destroyer;
+ 	sa.sa_flags = SA_SIGINFO;
+
+
+	if(sigaction(SIGINT, &sa, nullptr) == -1){
+		destroyer();	
+		std::cerr << "Sigaction failed/n";
+		exit(EXIT_FAILURE);
+
+	}
+
+	shared_array arr("arr", 10);
+	arr_ptr = &arr;
+
+	sem = get_semaphore("arr");
+	if(sem == SEM_FAILED){
+		destroyer();
+		perror("sem_open");
+		exit(EXIT_FAILURE);
+	}
 
 	while(true){
 		sem_wait(sem);

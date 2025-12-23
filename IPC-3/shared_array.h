@@ -37,7 +37,7 @@ class shared_array {
 				exit(EXIT_FAILURE); 
 			}
 
-		    struct stat st; 
+		  struct stat st; 
 			if(fstat(fd, &st) < 0){ 
 				perror("fstat");
 			    close(fd);
@@ -46,7 +46,7 @@ class shared_array {
 
 			if(st.st_size == 0){ 
 				if(ftruncate(fd, size * sizeof(int)) == -1){
-				       	shm_unlink(name.c_str()); 
+				    shm_unlink(name.c_str()); 
 						perror("Ftruncate"); 
 						close(fd); 
 						exit(EXIT_FAILURE); 
@@ -60,8 +60,8 @@ class shared_array {
 		    if(arr == MAP_FAILED){
 			       	shm_unlink(name.c_str());
 			       	perror("mmap"); 
-				close(fd); 
-			} 
+				      close(fd); 
+			  } 
 		} 
 		
 		shared_array(const shared_array&) = delete;
@@ -79,20 +79,20 @@ class shared_array {
 	       
 		shared_array& operator=(shared_array&& oth){
 		    if(this != &oth){ 
-				destroyer(); 
-				fd = oth.fd; 
-				arr = oth.arr;
-			    size = oth.size; 
-				name = std::move(oth.name); 
-				
-				oth.fd = -1;
-			    oth.arr = nullptr;
-			    oth.size = 0; 
-			} 
+          destroyer(); 
+          fd = oth.fd; 
+          arr = oth.arr;
+          size = oth.size; 
+          name = std::move(oth.name); 
+
+          oth.fd = -1;
+          oth.arr = nullptr;
+          oth.size = 0; 
+			  } 
 			return *this; 
 		}
 
-	    int& operator[](size_t index){
+	 int& operator[](size_t index){
 		    if(index >= size){
 			    throw std::out_of_range("Indexing out of bounds"); 
 			} 

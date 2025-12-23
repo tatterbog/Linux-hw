@@ -31,10 +31,10 @@ void handler(int, siginfo_t* info, void* ctx){
 	}
 
 	std::cout << "State of the context: EIP = " << g[REG_RIP] << ", EAX = " << g[REG_RAX] << ", EBX = " << g[REG_RBX] << '\n';
-	exit(0);
+	//exit(0);
 #else 
 	std::cout << "Can't get the info from other architectures\n";
-	exit(1);
+	//exit(1);
 #endif
 }
 
@@ -53,7 +53,7 @@ int main(){
 
 	if(sigaction(SIGUSR1, &sa, nullptr) == -1){
 		std::cerr << "Sigaction failed\n";
-                return 1;
+        return 1;
 	}
 
 	while(true){

@@ -31,6 +31,10 @@ int main(int argc, char** argv)
     long long N = atoll(argv[1]);
     int M = atoi(argv[2]);
 
+    if (M <= 0 || N <= 0){
+        std::cerr << "N and M must be positive\n";
+        return 1;
+    }
 
     int* arr = new int[N];
     for(long long i = 0; i < N; i++){
@@ -62,6 +66,13 @@ int main(int argc, char** argv)
         tds[i].res = 0;
 
         if(pthread_create(&tds[i].id, nullptr, sum, &tds[i]) != 0){
+            for(int j = 0; j < i; j++){
+                pthread_cancel(tds[j].id);
+            }
+            for(int j = 0; j < i; j++){
+                pthread_join(tds[j], nullptr);
+            }
+            
             std::cerr << "Thread creation failed\n";
             delete[] tds;
             delete[] arr;
@@ -88,3 +99,7 @@ int main(int argc, char** argv)
     delete[] arr;
     return 0;
 }
+
+
+
+

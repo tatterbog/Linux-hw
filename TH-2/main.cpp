@@ -17,6 +17,6 @@ int main(){
 		int* p = new int(i);
 		ps.run(increment, p);
 	}
-	sleep(2);
+	//sleep(2);
 	
 }

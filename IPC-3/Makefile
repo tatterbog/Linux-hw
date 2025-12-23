@@ -14,3 +14,4 @@ main2.o: main2.cpp shared_array.h
 
 clean:
 	rm -f *.o first second
+
